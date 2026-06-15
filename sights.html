@@ -3,132 +3,465 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sights — Nova Gallery</title>
+  <title>ARCA — Real Estate Photography, Aerial & Architectural</title>
+  <meta name="description" content="Real estate photography studio. Aerial drone, interiors, twilight, and architectural visuals that sell properties faster." />
 
   <link rel="icon" type="image/png" href="assets/generated/icon.png" />
   <link rel="apple-touch-icon" href="assets/generated/icon.png" />
 
+  <meta property="og:title" content="ARCA — Real Estate Photography" />
+  <meta property="og:description" content="Aerial, interior, twilight & architectural photography that sells properties faster." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://arca-product.vercel.app/frames-home/frame_0151.webp" />
+  <meta property="og:url" content="https://arca-product.vercel.app/sights.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
   <style>
     :root {
-      --bg: #0b0d12;
-      --panel: #141821;
-      --text: #e7ebf2;
-      --muted: #9aa4b2;
-      --accent: #5b8cff;
-      --accent-2: #7c5cff;
-      --border: #232938;
+      --bg: #070809;
+      --bg-2: #0c0e11;
+      --text: #f2f0ec;
+      --muted: #8b8f96;
+      --line: rgba(255,255,255,0.10);
+      --accent: #6fd6e8;          /* cool blueprint cyan, used sparingly */
+      --serif: "Fraunces", Georgia, "Times New Roman", serif;
+      --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
     a { color: inherit; text-decoration: none; }
-    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+    h1,h2,h3,.serif { font-family: var(--serif); font-weight: 300; letter-spacing: -0.01em; }
+    .eyebrow { font-size: 0.72rem; letter-spacing: 0.34em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
 
-    header {
-      position: sticky; top: 0; z-index: 10;
-      background: rgba(11,13,18,0.85);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-    }
-    nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
-    .logo { font-weight: 700; font-size: 1.2rem; letter-spacing: -0.02em; }
-    .logo span { color: var(--accent); }
-    .nav-links { display: flex; gap: 28px; }
-    .nav-links a { color: var(--muted); font-size: 0.95rem; transition: color .2s; }
+    /* Scroll progress bar */
+    .progress-bar { position: fixed; top: 0; left: 0; height: 2px; width: 0%; background: var(--accent); z-index: 200; box-shadow: 0 0 12px var(--accent); }
+
+    /* Loading overlay */
+    #loader { position: fixed; inset: 0; z-index: 300; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; transition: opacity .8s ease; }
+    #loader.done { opacity: 0; pointer-events: none; }
+    #loader .lk { font-family: var(--serif); font-size: 1.8rem; letter-spacing: 0.5em; padding-left: 0.5em; }
+    #loader .track { width: 220px; height: 1px; background: var(--line); overflow: hidden; }
+    #loader .fill { height: 100%; width: 0%; background: var(--accent); transition: width .25s ease; }
+    #loader .pct { font-size: 0.72rem; letter-spacing: 0.3em; color: var(--muted); }
+
+    /* Header */
+    header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; transition: background .3s, border-color .3s; border-bottom: 1px solid transparent; }
+    header.solid { background: rgba(7,8,9,0.72); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+    nav { display: flex; align-items: center; justify-content: space-between; height: 76px; }
+    .brand { font-family: var(--serif); font-size: 1.35rem; letter-spacing: 0.28em; padding-left: 0.28em; }
+    .nav-links { display: flex; gap: 36px; }
+    .nav-links a { font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); transition: color .25s; }
     .nav-links a:hover { color: var(--text); }
+    .nav-cta { font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 11px 22px; border: 1px solid var(--line); border-radius: 100px; transition: border-color .25s, color .25s; }
+    .nav-cta:hover { border-color: var(--accent); color: var(--accent); }
 
-    .btn {
-      display: inline-block;
-      padding: 13px 28px;
-      border-radius: 10px;
-      font-weight: 600;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: #fff;
-      transition: transform .15s, box-shadow .15s;
-      box-shadow: 0 8px 24px rgba(91,140,255,0.25);
+    /* Hero */
+    .hero { position: relative; min-height: 100vh; display: flex; align-items: center; overflow: hidden; }
+    .hero::after { content:""; position:absolute; inset:0; background: radial-gradient(120% 90% at 70% 20%, rgba(111,214,232,0.07), transparent 60%); pointer-events:none; }
+    .hero-bg { position: absolute; inset: 0; background: #000 center/cover no-repeat; opacity: 0.42; }
+    .hero-bg::after { content:""; position:absolute; inset:0; background: linear-gradient(90deg, var(--bg) 8%, rgba(7,8,9,0.4) 55%, transparent 100%), linear-gradient(0deg, var(--bg), transparent 40%); }
+    .hero-inner { position: relative; z-index: 2; max-width: 760px; }
+    .hero h1 { font-size: clamp(2.8rem, 7vw, 5.6rem); line-height: 1.02; margin: 22px 0 24px; }
+    .hero h1 em { font-style: italic; color: var(--accent); }
+    .hero p { font-size: 1.12rem; color: var(--muted); max-width: 480px; font-weight: 300; margin-bottom: 38px; }
+    .btn { display: inline-flex; align-items: center; gap: 10px; font-size: 0.82rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; padding: 16px 30px; border-radius: 100px; background: var(--text); color: #07080a; transition: transform .2s, box-shadow .2s; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(255,255,255,0.12); }
+    .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+    .btn.ghost:hover { border-color: var(--accent); color: var(--accent); box-shadow: none; }
+    .hero-meta { position: absolute; bottom: 40px; left: 0; right: 0; z-index: 2; }
+    .hero-meta .wrap { display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; }
+    .scroll-hint { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 12px; }
+    .scroll-hint::before { content:""; width: 38px; height: 1px; background: var(--muted); display:inline-block; }
+
+    /* Generic section rhythm */
+    section { padding: 130px 0; }
+    .section-head { max-width: 620px; margin-bottom: 64px; }
+    .section-head h2 { font-size: clamp(2rem, 4vw, 3.1rem); line-height: 1.08; margin-top: 16px; }
+    .section-head p { color: var(--muted); margin-top: 18px; font-weight: 300; }
+
+    /* Services */
+    .services { background: var(--bg-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .svc { padding: 44px 36px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); min-height: 260px; display:flex; flex-direction: column; transition: background .3s; }
+    .svc:hover { background: rgba(255,255,255,0.02); }
+    .svc .no { font-size: 0.72rem; letter-spacing: 0.2em; color: var(--accent); margin-bottom: auto; }
+    .svc h3 { font-size: 1.5rem; margin-bottom: 10px; }
+    .svc p { color: var(--muted); font-size: 0.95rem; font-weight: 300; }
+    .svc-grid .svc:nth-child(3n) { border-right: none; }
+
+    /* Scroll animation experience */
+    .reveal-exp { position: relative; height: 420vh; background: #000; }
+    .reveal-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    #frame-canvas {
+      max-height: 88vh; width: auto; max-width: 92vw;
+      will-change: transform;
+      -webkit-mask-image: radial-gradient(ellipse 72% 70% at 50% 48%, #000 52%, transparent 82%);
+      mask-image: radial-gradient(ellipse 72% 70% at 50% 48%, #000 52%, transparent 82%);
     }
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(91,140,255,0.35); }
+    .exp-phase { position: absolute; max-width: 380px; padding: 26px 28px; left: 6%; top: 50%; transform: translateY(-40%); opacity: 0; transition: opacity .7s ease, transform .7s ease; pointer-events: none; }
+    .exp-phase.right { left: auto; right: 6%; text-align: right; }
+    .exp-phase.visible { opacity: 1; transform: translateY(-50%); }
+    .exp-phase .eyebrow { color: var(--accent); }
+    .exp-phase h3 { font-size: clamp(1.6rem, 3vw, 2.4rem); line-height: 1.1; margin-top: 14px; }
+    .exp-phase p { color: var(--muted); margin-top: 12px; font-weight: 300; font-size: 0.95rem; }
+    .exp-intro { position:absolute; top: 10%; left:0; right:0; text-align:center; z-index:3; }
+    .exp-intro .eyebrow { color: var(--muted); }
 
-    .hero {
-      padding: 110px 0 80px;
-      text-align: center;
-      background: radial-gradient(900px 400px at 50% -10%, rgba(124,92,255,0.18), transparent);
+    /* Portfolio strip */
+    .work-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+    .work-grid figure { position: relative; overflow: hidden; border-radius: 4px; background: var(--bg-2); }
+    .work-grid img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .7s ease; }
+    .work-grid figure:hover img { transform: scale(1.06); }
+    .w-tall { grid-column: span 4; aspect-ratio: 3/4; }
+    .w-wide { grid-column: span 8; aspect-ratio: 16/10; }
+    .w-half { grid-column: span 6; aspect-ratio: 4/3; }
+
+    /* Stats */
+    .stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; border-top: 1px solid var(--line); padding-top: 64px; }
+    .stat .n { font-family: var(--serif); font-size: clamp(2.4rem,5vw,3.6rem); }
+    .stat .l { color: var(--muted); font-size: 0.82rem; letter-spacing: 0.08em; margin-top: 6px; }
+
+    /* Booking */
+    .book { background: var(--bg-2); border-top: 1px solid var(--line); }
+    .book-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .book h2 { font-size: clamp(2.2rem,4.5vw,3.4rem); line-height: 1.06; }
+    .book .lead { color: var(--muted); margin-top: 20px; font-weight: 300; max-width: 420px; }
+    .book .detail { margin-top: 36px; display: flex; flex-direction: column; gap: 10px; }
+    .book .detail a { color: var(--text); font-size: 1.05rem; }
+    .book .detail span { color: var(--muted); font-size: 0.8rem; letter-spacing: 0.14em; text-transform: uppercase; }
+    form { display: grid; gap: 18px; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    label { display: block; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    input, select, textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--line); color: var(--text); font-family: var(--sans); font-size: 1rem; padding: 10px 0; transition: border-color .25s; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
+    select option { background: var(--bg-2); }
+    form .btn { justify-content: center; margin-top: 10px; border: none; cursor: pointer; }
+    .form-ok { color: var(--accent); font-size: 0.9rem; letter-spacing: 0.04em; }
+
+    footer { border-top: 1px solid var(--line); padding: 60px 0 40px; }
+    .foot-grid { display: flex; justify-content: space-between; align-items: end; flex-wrap: wrap; gap: 24px; }
+    .foot-grid .brand { font-size: 1.6rem; }
+    footer .links { display: flex; gap: 26px; }
+    footer .links a { color: var(--muted); font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    footer .links a:hover { color: var(--text); }
+    .copy { color: var(--muted); font-size: 0.78rem; margin-top: 30px; }
+
+    /* Reveal-on-scroll for standard sections */
+    .rise { opacity: 0; transform: translateY(30px); transition: opacity .9s ease, transform .9s ease; }
+    .rise.in { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+      .wrap { padding: 0 22px; }
+      .nav-links { display: none; }
+      .svc-grid { grid-template-columns: 1fr; }
+      .svc { border-right: none; }
+      .book-grid { grid-template-columns: 1fr; gap: 48px; }
+      .stats { grid-template-columns: repeat(2,1fr); row-gap: 40px; }
+      .w-tall, .w-wide, .w-half { grid-column: span 12; }
+      .exp-phase { left: 5%; right: 5%; max-width: none; text-align: center; }
+      .exp-phase.right { text-align: center; }
+      section { padding: 90px 0; }
     }
-    .hero h1 { font-size: 3.2rem; letter-spacing: -0.03em; margin-bottom: 18px; }
-    .hero p { color: var(--muted); font-size: 1.2rem; max-width: 620px; margin: 0 auto; }
-
-    section { padding: 64px 0; }
-
-    .gallery { columns: 3; column-gap: 18px; }
-    .gallery figure {
-      break-inside: avoid; margin-bottom: 18px; border-radius: 14px; overflow: hidden;
-      border: 1px solid var(--border); position: relative; background: var(--panel);
-    }
-    .gallery img { width: 100%; display: block; transition: transform .3s; }
-    .gallery figure:hover img { transform: scale(1.05); }
-    .gallery figcaption {
-      position: absolute; left: 0; right: 0; bottom: 0;
-      padding: 14px 16px; font-size: 0.9rem; font-weight: 600;
-      background: linear-gradient(transparent, rgba(11,13,18,0.9));
-      opacity: 0; transition: opacity .25s;
-    }
-    .gallery figure:hover figcaption { opacity: 1; }
-
-    footer { border-top: 1px solid var(--border); padding: 36px 0; text-align: center; color: var(--muted); font-size: 0.9rem; }
-
-    @media (max-width: 900px) { .gallery { columns: 2; } }
-    @media (max-width: 600px) { .gallery { columns: 1; } .hero h1 { font-size: 2.3rem; } .nav-links { display: none; } }
   </style>
 </head>
 <body>
-  <header>
-    <div class="container">
+  <div class="progress-bar" id="progressBar"></div>
+
+  <div id="loader">
+    <div class="lk">ARCA</div>
+    <div class="track"><div class="fill" id="loadFill"></div></div>
+    <div class="pct" id="loadPct">0%</div>
+  </div>
+
+  <header id="header">
+    <div class="wrap">
       <nav>
-        <a class="logo" href="product.html">Nova<span>.</span></a>
+        <a class="brand" href="sights.html">ARCA</a>
         <div class="nav-links">
-          <a href="product.html">Product</a>
-          <a href="TesterTech.html">Tester Tech</a>
-          <a href="sights.html">Sights</a>
+          <a href="#services">Services</a>
+          <a href="#experience">The Reveal</a>
+          <a href="#work">Work</a>
+          <a href="#book">Book</a>
         </div>
-        <a class="btn" href="TesterTech.html">Shop Gadgets</a>
+        <a class="nav-cta" href="#book">Book a Shoot</a>
       </nav>
     </div>
   </header>
 
+  <!-- HERO -->
   <section class="hero">
-    <div class="container">
-      <h1>Sights</h1>
-      <p>A visual gallery of the Nova smart-gadget lineup and the worlds they live in.</p>
+    <div class="hero-bg" style="background-image:url('frames-home/frame_0151.webp');"></div>
+    <div class="wrap hero-inner">
+      <span class="eyebrow">Real Estate Photography · Aerial · Architectural</span>
+      <h1>Every property has a <em>story</em>. We light it.</h1>
+      <p>Aerial drone, interiors, twilight, and architectural imagery that makes listings move — captured with cinema-grade gear and an editor's eye.</p>
+      <div style="display:flex; gap:14px; flex-wrap:wrap;">
+        <a class="btn" href="#book">Book a Shoot</a>
+        <a class="btn ghost" href="#experience">See the Reveal</a>
+      </div>
+    </div>
+    <div class="hero-meta">
+      <div class="wrap">
+        <div class="scroll-hint">Scroll</div>
+        <div class="eyebrow">Est. 2026 · Available regionwide</div>
+      </div>
     </div>
   </section>
 
-  <section>
-    <div class="container">
-      <div class="gallery">
-        <figure><img src="assets/generated/smartwatch.png" alt="Pulse Smartwatch" /><figcaption>Pulse Smartwatch</figcaption></figure>
-        <figure><img src="assets/generated/smart-glasses.png" alt="Vision Smart Glasses" /><figcaption>Vision Smart Glasses</figcaption></figure>
-        <figure><img src="assets/generated/hero-bg.png" alt="Futuristic tech" /><figcaption>Future Tech</figcaption></figure>
-        <figure><img src="assets/generated/earbuds.png" alt="Pro Wireless Earbuds" /><figcaption>Pro Wireless Earbuds</figcaption></figure>
-        <figure><img src="assets/generated/smart-bulb.png" alt="Aura Smart Bulb" /><figcaption>Aura Smart Bulb</figcaption></figure>
-        <figure><img src="assets/generated/voice-assistant.png" alt="Nova Voice Assistant" /><figcaption>Nova Voice Assistant</figcaption></figure>
-        <figure><img src="assets/generated/smart-home-bg.png" alt="Smart Home" /><figcaption>Smart Home</figcaption></figure>
-        <figure><img src="assets/generated/fitness-band.png" alt="Active Fitness Band" /><figcaption>Active Fitness Band</figcaption></figure>
-        <figure><img src="assets/generated/smart-camera.png" alt="Guardian Smart Camera" /><figcaption>Guardian Smart Camera</figcaption></figure>
-        <figure><img src="assets/generated/thermostat.png" alt="Climate Smart Thermostat" /><figcaption>Climate Smart Thermostat</figcaption></figure>
-        <figure><img src="assets/generated/smart-display.png" alt="Smart Display Hub" /><figcaption>Smart Display Hub</figcaption></figure>
-        <figure><img src="assets/generated/audio-bg.png" alt="Audio" /><figcaption>Audio &amp; Assistants</figcaption></figure>
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="wrap">
+      <div class="section-head rise">
+        <span class="eyebrow">What we shoot</span>
+        <h2>One studio for every angle of the property.</h2>
+        <p>From the ground, from the air, and from inside — a complete visual package delivered fast.</p>
+      </div>
+    </div>
+    <div class="svc-grid rise">
+      <div class="svc"><div class="no">01</div><h3>Aerial &amp; Drone</h3><p>Licensed drone pilots capturing the lot, rooftop, and neighborhood context that ground shots can't.</p></div>
+      <div class="svc"><div class="no">02</div><h3>Interiors</h3><p>Wide, true-to-life interior frames with balanced light and clean verticals — every room at its best.</p></div>
+      <div class="svc"><div class="no">03</div><h3>Architectural</h3><p>Detail and form studies for builders, architects, and design-forward listings.</p></div>
+      <div class="svc"><div class="no">04</div><h3>Twilight</h3><p>Golden-hour and dusk exteriors with warm interior glow — the frames buyers remember.</p></div>
+      <div class="svc"><div class="no">05</div><h3>Cinematic Video</h3><p>Walkthrough films and aerial reels scored and graded for social and listing platforms.</p></div>
+      <div class="svc"><div class="no">06</div><h3>3D &amp; Floor Plans</h3><p>Matterport tours and measured floor plans that turn browsers into showings.</p></div>
+    </div>
+  </section>
+
+  <!-- SCROLL REVEAL EXPERIENCE -->
+  <div class="reveal-exp" id="experience">
+    <div class="reveal-sticky">
+      <div class="exp-intro" id="expIntro">
+        <span class="eyebrow">The Reveal</span>
+      </div>
+      <canvas id="frame-canvas"></canvas>
+
+      <div class="exp-phase" id="phase-1">
+        <span class="eyebrow">01 — The blueprint</span>
+        <h3>It starts as structure.</h3>
+        <p>Every property is a system of lines, light, and space waiting to be read.</p>
+      </div>
+      <div class="exp-phase right" id="phase-2">
+        <span class="eyebrow">02 — Every detail</span>
+        <h3>We map what others miss.</h3>
+        <p>Roofline, hardscape, pool, flow — the full footprint, understood before a single frame.</p>
+      </div>
+      <div class="exp-phase" id="phase-3">
+        <span class="eyebrow">03 — Into the light</span>
+        <h3>Then we capture it.</h3>
+        <p>The moment structure becomes story — graded, warm, and unmistakably real.</p>
+      </div>
+      <div class="exp-phase right" id="phase-4">
+        <span class="eyebrow">04 — Delivered</span>
+        <h3>Reality, elevated.</h3>
+        <p>Listing-ready imagery that makes a property impossible to scroll past.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORK -->
+  <section id="work">
+    <div class="wrap">
+      <div class="section-head rise">
+        <span class="eyebrow">Selected work</span>
+        <h2>Frames from the field.</h2>
+      </div>
+      <div class="work-grid rise">
+        <figure class="w-tall"><img src="frames-home/frame_0001.webp" alt="Architectural wireframe" /></figure>
+        <figure class="w-wide"><img src="frames-home/frame_0151.webp" alt="Aerial twilight pool" /></figure>
+        <figure class="w-half"><img src="frames-home/frame_0090.webp" alt="Drone exterior" /></figure>
+        <figure class="w-half"><img src="frames-home/frame_0060.webp" alt="Property reveal" /></figure>
+      </div>
+
+      <div class="stats rise">
+        <div class="stat"><div class="n">600+</div><div class="l">Properties shot</div></div>
+        <div class="stat"><div class="n">24h</div><div class="l">Standard delivery</div></div>
+        <div class="stat"><div class="n">4K</div><div class="l">Aerial &amp; video</div></div>
+        <div class="stat"><div class="n">100%</div><div class="l">Licensed &amp; insured</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOK -->
+  <section class="book" id="book">
+    <div class="wrap">
+      <div class="book-grid">
+        <div class="rise">
+          <span class="eyebrow">Book a session</span>
+          <h2>Let's put your listing in the best light.</h2>
+          <p class="lead">Tell us about the property and what you need — we'll send availability and a quote within one business day.</p>
+          <div class="detail">
+            <span>Studio</span>
+            <a href="mailto:hello@arca.studio">hello@arca.studio</a>
+            <a href="tel:+10000000000">+1 (000) 000-0000</a>
+          </div>
+        </div>
+        <form class="rise" id="bookForm">
+          <div class="row2">
+            <div><label for="name">Name</label><input id="name" type="text" required /></div>
+            <div><label for="email">Email</label><input id="email" type="email" required /></div>
+          </div>
+          <div><label for="addr">Property address</label><input id="addr" type="text" placeholder="Street, City" /></div>
+          <div class="row2">
+            <div>
+              <label for="type">Shoot type</label>
+              <select id="type">
+                <option>Aerial &amp; Drone</option>
+                <option>Interiors</option>
+                <option>Twilight</option>
+                <option>Cinematic Video</option>
+                <option>Full package</option>
+              </select>
+            </div>
+            <div><label for="date">Preferred date</label><input id="date" type="date" /></div>
+          </div>
+          <div><label for="notes">Notes</label><textarea id="notes" rows="3" placeholder="Square footage, deadlines, anything else…"></textarea></div>
+          <button class="btn" type="submit">Request availability</button>
+          <div class="form-ok" id="formOk" style="display:none;">Thank you — we'll be in touch within one business day.</div>
+        </form>
       </div>
     </div>
   </section>
 
   <footer>
-    <div class="container">
-      <p>&copy; 2026 Nova. All rights reserved. · <a href="product.html" style="color:var(--accent);">Back to Product</a></p>
+    <div class="wrap">
+      <div class="foot-grid">
+        <a class="brand" href="sights.html">ARCA</a>
+        <div class="links">
+          <a href="#services">Services</a>
+          <a href="#work">Work</a>
+          <a href="#book">Book</a>
+          <a href="product.html">Nova</a>
+        </div>
+      </div>
+      <p class="copy">© 2026 ARCA Studio — Real Estate Photography, Aerial &amp; Architectural. All rights reserved.</p>
     </div>
   </footer>
+
+  <script>
+    /* ---------- Frame sequence config ---------- */
+    const TOTAL = 151;
+    const BATCH = 20;
+    const framePath = i => `frames-home/frame_${String(i + 1).padStart(4, '0')}.webp`;
+    const frames = new Array(TOTAL);
+
+    const canvas = document.getElementById('frame-canvas');
+    const ctx = canvas.getContext('2d');
+    const loader = document.getElementById('loader');
+    const loadFill = document.getElementById('loadFill');
+    const loadPct = document.getElementById('loadPct');
+
+    function loadFrame(i) {
+      return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => { frames[i] = img; resolve(); };
+        img.onerror = () => resolve();
+        img.src = framePath(i);
+      });
+    }
+
+    /* Batched preload — keeps the pipeline saturated without overwhelming the browser */
+    async function preload() {
+      let loaded = 0;
+      for (let i = 0; i < TOTAL; i += BATCH) {
+        const batch = [];
+        for (let j = i; j < Math.min(i + BATCH, TOTAL); j++) batch.push(loadFrame(j).then(() => {
+          loaded++;
+          const pct = Math.round((loaded / TOTAL) * 100);
+          loadFill.style.width = pct + '%';
+          loadPct.textContent = pct + '%';
+        }));
+        await Promise.all(batch);
+      }
+    }
+
+    function sizeCanvas() {
+      const first = frames[0];
+      if (!first) return;
+      canvas.width = first.naturalWidth;
+      canvas.height = first.naturalHeight;
+      ctx.drawImage(first, 0, 0, canvas.width, canvas.height);
+    }
+
+    /* ---------- Scroll → frame state (no drawing here) ---------- */
+    const expEl = document.getElementById('experience');
+    let currentFrame = 0;
+    let drawnFrame = -1;
+
+    const phases = [
+      { el: document.getElementById('phase-1'), start: 0.06, end: 0.26 },
+      { el: document.getElementById('phase-2'), start: 0.30, end: 0.50 },
+      { el: document.getElementById('phase-3'), start: 0.54, end: 0.74 },
+      { el: document.getElementById('phase-4'), start: 0.78, end: 0.97 },
+    ];
+    const introEl = document.getElementById('expIntro');
+
+    function getExpProgress() {
+      const rect = expEl.getBoundingClientRect();
+      const total = rect.height - window.innerHeight;
+      if (total <= 0) return 0;
+      return Math.min(Math.max(-rect.top / total, 0), 1);
+    }
+
+    function onScroll() {
+      const p = getExpProgress();
+      currentFrame = Math.min(Math.floor(p * TOTAL), TOTAL - 1);
+      for (const ph of phases) {
+        if (!ph.el) continue;
+        ph.el.classList.toggle('visible', p >= ph.start && p <= ph.end);
+      }
+      if (introEl) introEl.style.opacity = p > 0.04 ? '0' : '1';
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', () => { sizeCanvas(); drawnFrame = -1; }, { passive: true });
+
+    /* ---------- rAF render loop (only draws on change) ---------- */
+    function tick() {
+      if (currentFrame !== drawnFrame && frames[currentFrame]) {
+        ctx.drawImage(frames[currentFrame], 0, 0, canvas.width, canvas.height);
+        drawnFrame = currentFrame;
+      }
+      requestAnimationFrame(tick);
+    }
+
+    /* ---------- Boot ---------- */
+    (async function boot() {
+      await loadFrame(0);
+      sizeCanvas();
+      await preload();
+      loader.classList.add('done');
+      onScroll();
+      tick();
+    })();
+
+    /* ---------- Page chrome ---------- */
+    const header = document.getElementById('header');
+    const progressBar = document.getElementById('progressBar');
+    function chrome() {
+      header.classList.toggle('solid', window.scrollY > 40);
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+    }
+    window.addEventListener('scroll', chrome, { passive: true });
+    chrome();
+
+    /* Reveal-on-scroll for standard sections */
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.18 });
+    document.querySelectorAll('.rise').forEach(el => io.observe(el));
+
+    /* Booking form */
+    document.getElementById('bookForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      e.target.querySelectorAll('input,select,textarea,button').forEach(el => el.disabled = true);
+      document.getElementById('formOk').style.display = 'block';
+    });
+  </script>
 </body>
 </html>
