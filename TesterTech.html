@@ -157,7 +157,8 @@
     .review { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 26px 24px; }
     .review .stars { color: #ffc24b; font-size: 1.05rem; margin-bottom: 12px; letter-spacing: 2px; }
     .review p { font-size: 0.96rem; margin-bottom: 16px; }
-    .review .who { color: var(--muted); font-size: 0.88rem; font-weight: 600; }
+    .review .who { color: var(--muted); font-size: 0.88rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+    .review .who img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); }
 
     /* Newsletter */
     .newsletter { background: linear-gradient(135deg, rgba(91,140,255,0.12), rgba(124,92,255,0.12)); border: 1px solid var(--border); border-radius: 20px; padding: 48px 32px; text-align: center; }
@@ -304,7 +305,7 @@
   </section>
 
   <!-- Wearables -->
-  <section id="wearables">
+  <section id="wearables" class="bg-img" style="background-image: linear-gradient(rgba(11,13,18,0.88), rgba(11,13,18,0.95)), url('assets/generated/wearables-bg.png');">
     <div class="container">
       <h2 class="section-title">Wearables</h2>
       <p class="section-sub">Track your day, your health, and your world — right from your wrist and eyes.</p>
@@ -470,17 +471,17 @@
         <div class="review reveal">
           <div class="stars">★★★★★</div>
           <p>"The Pulse Smartwatch genuinely changed my routine — battery lasts a full week and the health tracking is spot on."</p>
-          <div class="who">— Maya R., verified buyer</div>
+          <div class="who"><img src="assets/generated/avatar-maya.jpg" alt="Maya R." />Maya R., verified buyer</div>
         </div>
         <div class="review reveal">
           <div class="stars">★★★★★</div>
           <p>"Vision Glasses feel like the future. Notifications, directions, and calls without ever pulling out my phone."</p>
-          <div class="who">— Daniel K., verified buyer</div>
+          <div class="who"><img src="assets/generated/avatar-daniel.jpg" alt="Daniel K." />Daniel K., verified buyer</div>
         </div>
         <div class="review reveal">
           <div class="stars">★★★★☆</div>
           <p>"The Nova Assistant runs my whole home now. Setup took five minutes and it just works with everything."</p>
-          <div class="who">— Priya S., verified buyer</div>
+          <div class="who"><img src="assets/generated/avatar-priya.png" alt="Priya S." />Priya S., verified buyer</div>
         </div>
       </div>
     </div>
