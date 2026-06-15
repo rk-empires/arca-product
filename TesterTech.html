@@ -4,6 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tester Tech — Smart Gadgets</title>
+
+  <link rel="icon" type="image/png" href="assets/generated/icon.png" />
+  <link rel="apple-touch-icon" href="assets/generated/icon.png" />
+
+  <meta property="og:title" content="Tester Tech — Smart Gadgets" />
+  <meta property="og:description" content="Smartwatches, smart glasses, voice assistants, and connected devices." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://arca-product.vercel.app/assets/generated/og-image.png" />
+  <meta property="og:url" content="https://arca-product.vercel.app/TesterTech.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Tester Tech — Smart Gadgets" />
+  <meta name="twitter:description" content="Smartwatches, smart glasses, voice assistants, and connected devices." />
+  <meta name="twitter:image" content="https://arca-product.vercel.app/assets/generated/og-image.png" />
+
   <style>
     :root {
       --bg: #0b0d12;
@@ -68,6 +82,8 @@
     .hero p { color: var(--muted); font-size: 1.25rem; max-width: 640px; margin: 0 auto 36px; }
 
     section { padding: 80px 0; }
+    .bg-img { background-size: cover; background-position: center; background-repeat: no-repeat; }
+    .bg-img > .container { position: relative; z-index: 1; }
     .section-title { font-size: 2rem; letter-spacing: -0.02em; margin-bottom: 12px; text-align: center; }
     .section-sub { color: var(--muted); text-align: center; max-width: 560px; margin: 0 auto 48px; }
 
@@ -326,7 +342,7 @@
   </section>
 
   <!-- Smart Home -->
-  <section id="smart-home" style="background:#0e1118;">
+  <section id="smart-home" class="bg-img" style="background-image: linear-gradient(rgba(11,13,18,0.86), rgba(11,13,18,0.94)), url('assets/generated/smart-home-bg.png');">
     <div class="container">
       <h2 class="section-title">Smart Home</h2>
       <p class="section-sub">Automate, secure, and connect every corner of your home.</p>
@@ -363,7 +379,7 @@
   </section>
 
   <!-- Audio & Assistants -->
-  <section id="audio">
+  <section id="audio" class="bg-img" style="background-image: linear-gradient(rgba(11,13,18,0.86), rgba(11,13,18,0.94)), url('assets/generated/audio-bg.png');">
     <div class="container">
       <h2 class="section-title">Audio &amp; Assistants</h2>
       <p class="section-sub">Ask, play, and control — hands-free, room-filling sound and a voice assistant that gets it done.</p>
@@ -471,7 +487,7 @@
   </section>
 
   <!-- Why choose us -->
-  <section id="why">
+  <section id="why" class="bg-img" style="background-image: linear-gradient(rgba(11,13,18,0.86), rgba(11,13,18,0.94)), url('assets/generated/why-bg.png');">
     <div class="container">
       <h2 class="section-title reveal">Why choose us</h2>
       <p class="section-sub reveal">More than gadgets — a smarter way to live.</p>
