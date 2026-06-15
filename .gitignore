@@ -13,7 +13,10 @@ VIDEO TO WEBSITE.md
 Thumbs.db
 .DS_Store
 
-# keep only the two frames used as video posters
-frames/*
-!frames/frame_0001.webp
-!frames/frame_0060.webp
+# frames/ power the scroll-scrub experience (experience.html) — track all of them
+
+.vercel
+
+# personal brand assets (not part of the site)
+RK Empires*.png
+RK Empires*.jpeg
