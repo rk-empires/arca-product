@@ -1,3 +1,7 @@
+# secrets / env
+.env
+.env.*
+
 # internal tooling / screenshots
 .shots/
 .vercel/
