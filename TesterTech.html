@@ -146,6 +146,64 @@
     .newsletter input { flex: 1; padding: 13px 16px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 1rem; }
     .newsletter input:focus { outline: none; border-color: var(--accent); }
 
+    /* Announcement bar */
+    .announce { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; text-align: center; font-size: 0.88rem; font-weight: 600; padding: 9px 16px; letter-spacing: 0.02em; }
+
+    /* Trust bar */
+    .trust { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: #0e1118; }
+    .trust-row { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 20px; padding: 22px 0; }
+    .trust-item { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 0.92rem; font-weight: 600; }
+    .trust-item .ti { font-size: 1.2rem; }
+    .press { text-align: center; color: #5a6373; font-size: 0.82rem; letter-spacing: 0.18em; padding-bottom: 18px; text-transform: uppercase; }
+
+    /* FAQ accordion */
+    .faq { max-width: 760px; margin: 0 auto; }
+    .faq-item { border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; background: var(--panel); overflow: hidden; }
+    .faq-q { width: 100%; text-align: left; background: none; border: none; color: var(--text); font-size: 1.02rem; font-weight: 600; padding: 18px 22px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-family: inherit; }
+    .faq-q .chev { transition: transform .25s; color: var(--accent); flex-shrink: 0; }
+    .faq-item.open .faq-q .chev { transform: rotate(180deg); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height .3s ease; color: var(--muted); font-size: 0.95rem; }
+    .faq-a p { padding: 0 22px 20px; }
+
+    /* Sticky add-to-cart bar */
+    .sticky-bar {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+      background: rgba(11,13,18,0.92); backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border);
+      transform: translateY(100%); transition: transform .3s ease;
+      padding: 12px 0;
+    }
+    .sticky-bar.show { transform: translateY(0); }
+    .sticky-bar .container { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .sticky-bar .sb-info { display: flex; flex-direction: column; }
+    .sticky-bar .sb-name { font-weight: 700; }
+    .sticky-bar .sb-price { color: var(--accent); font-weight: 700; }
+
+    /* Cart drawer */
+    .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); opacity: 0; pointer-events: none; transition: opacity .3s; z-index: 100; }
+    .cart-overlay.open { opacity: 1; pointer-events: auto; }
+    .cart-drawer {
+      position: fixed; top: 0; right: 0; bottom: 0; width: 380px; max-width: 90vw; z-index: 101;
+      background: var(--bg); border-left: 1px solid var(--border);
+      transform: translateX(100%); transition: transform .3s ease;
+      display: flex; flex-direction: column;
+    }
+    .cart-drawer.open { transform: translateX(0); }
+    .cart-head { display: flex; justify-content: space-between; align-items: center; padding: 22px 24px; border-bottom: 1px solid var(--border); }
+    .cart-head h3 { font-size: 1.2rem; }
+    .cart-close { background: none; border: none; color: var(--muted); font-size: 1.6rem; cursor: pointer; line-height: 1; }
+    .cart-items { flex: 1; overflow-y: auto; padding: 16px 24px; }
+    .cart-empty { color: var(--muted); text-align: center; margin-top: 40px; }
+    .cart-line { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .cart-line .cl-name { font-size: 0.95rem; }
+    .cart-line .cl-qty { color: var(--muted); font-size: 0.85rem; }
+    .cart-line .cl-price { font-weight: 700; }
+    .cart-line .cl-remove { background: none; border: none; color: #5a6373; cursor: pointer; font-size: 1.1rem; }
+    .cart-foot { padding: 20px 24px; border-top: 1px solid var(--border); }
+    .cart-total { display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; margin-bottom: 16px; }
+    .cart-foot .btn { width: 100%; text-align: center; }
+    .cart-count { background: var(--accent); color: #fff; border-radius: 999px; font-size: 0.7rem; font-weight: 700; padding: 1px 7px; margin-left: 4px; vertical-align: middle; }
+
     /* Floating Buy Now (mobile) */
     .buy-now-float {
       display: none; position: fixed; left: 20px; right: 20px; bottom: 20px; z-index: 50;
@@ -164,6 +222,7 @@
   </style>
 </head>
 <body>
+  <div class="announce">🚚 Free 2-day shipping on orders over $50 · 30-day returns · 2-year warranty</div>
   <header>
     <div class="container">
       <nav>
@@ -174,9 +233,10 @@
           <a href="#audio">Audio &amp; Assistants</a>
           <a href="#compare">Compare</a>
           <a href="#reviews">Reviews</a>
+          <a href="#faq">FAQ</a>
           <a href="product.html">Home</a>
         </div>
-        <a class="btn" href="#wearables">Shop Now</a>
+        <button class="btn" type="button" onclick="openCart()">🛒 Cart<span class="cart-count" id="navCount">0</span></button>
       </nav>
     </div>
   </header>
@@ -195,6 +255,20 @@
     <div class="marquee-track">
       <span>⌚ Smartwatches</span><span>🕶️ Smart Glasses</span><span>🔊 Voice Assistants</span><span>📷 Smart Cameras</span><span>💡 Smart Lighting</span><span>🎧 Wireless Audio</span><span>🌡️ Smart Climate</span><span>🏠 Home Automation</span>
       <span>⌚ Smartwatches</span><span>🕶️ Smart Glasses</span><span>🔊 Voice Assistants</span><span>📷 Smart Cameras</span><span>💡 Smart Lighting</span><span>🎧 Wireless Audio</span><span>🌡️ Smart Climate</span><span>🏠 Home Automation</span>
+    </div>
+  </div>
+
+  <!-- Trust bar -->
+  <div class="trust">
+    <div class="container">
+      <div class="trust-row">
+        <div class="trust-item"><span class="ti">🚚</span> Free 2-Day Shipping</div>
+        <div class="trust-item"><span class="ti">🔒</span> Secure Checkout</div>
+        <div class="trust-item"><span class="ti">↩️</span> 30-Day Returns</div>
+        <div class="trust-item"><span class="ti">🛡️</span> 2-Year Warranty</div>
+        <div class="trust-item"><span class="ti">💳</span> Visa · Mastercard · Apple&nbsp;Pay</div>
+      </div>
+      <div class="press">As seen in · WIRED · The Verge · TechCrunch · Engadget · CNET</div>
     </div>
   </div>
 
@@ -223,7 +297,7 @@
             <h3>Pulse Smartwatch</h3>
             <p>Heart-rate, GPS, and 7-day battery in a sleek AMOLED display.</p>
             <div class="price">$249</div>
-            <a class="btn" href="#">Add to Cart</a>
+            <button class="btn add-cart" type="button">Add to Cart</button>
           </div>
         </div>
         <div class="card">
@@ -232,7 +306,7 @@
             <h3>Vision Smart Glasses</h3>
             <p>AR overlays, open-ear audio, and a built-in camera in a featherweight frame.</p>
             <div class="price">$399</div>
-            <a class="btn" href="#">Add to Cart</a>
+            <button class="btn add-cart" type="button">Add to Cart</button>
           </div>
         </div>
         <div class="card">
@@ -241,7 +315,7 @@
             <h3>Active Fitness Band</h3>
             <p>Lightweight tracker with sleep, stress, and SpO2 monitoring.</p>
             <div class="price">$89</div>
-            <a class="btn" href="#">Add to Cart</a>
+            <button class="btn add-cart" type="button">Add to Cart</button>
           </div>
         </div>
       </div>
@@ -260,7 +334,7 @@
             <h3>Guardian Smart Camera</h3>
             <p>2K security camera with night vision and motion alerts to your phone.</p>
             <div class="price">$129</div>
-            <a class="btn" href="#">Add to Cart</a>
+            <button class="btn add-cart" type="button">Add to Cart</button>
           </div>
         </div>
         <div class="card">
@@ -269,7 +343,7 @@
             <h3>Aura Smart Bulb Set</h3>
             <p>16M colors, voice control, and scheduling for the perfect ambiance.</p>
             <div class="price">$59</div>
-            <a class="btn" href="#">Add to Cart</a>
+            <button class="btn add-cart" type="button">Add to Cart</button>
           </div>
         </div>
         <div class="card">
@@ -278,7 +352,7 @@
             <h3>Climate Smart Thermostat</h3>
             <p>Learns your routine and cuts energy bills with adaptive scheduling.</p>
             <div class="price">$179</div>
-            <a class="btn" href="#">Add to Cart</a>
+            <button class="btn add-cart" type="button">Add to Cart</button>
           </div>
         </div>
       </div>
@@ -297,7 +371,7 @@
             <h3>Nova Voice Assistant</h3>
             <p>Alexa-style smart speaker — answers, reminders, and whole-home control.</p>
             <div class="price">$99</div>
-            <a class="btn" href="#">Add to Cart</a>
+            <button class="btn add-cart" type="button">Add to Cart</button>
           </div>
         </div>
         <div class="card">
@@ -306,7 +380,7 @@
             <h3>Pro Wireless Earbuds</h3>
             <p>Active noise cancellation, spatial audio, and 30-hour battery case.</p>
             <div class="price">$149</div>
-            <a class="btn" href="#">Add to Cart</a>
+            <button class="btn add-cart" type="button">Add to Cart</button>
           </div>
         </div>
         <div class="card">
@@ -315,7 +389,7 @@
             <h3>Smart Display Hub</h3>
             <p>Touchscreen assistant for video calls, recipes, and home dashboards.</p>
             <div class="price">$189</div>
-            <a class="btn" href="#">Add to Cart</a>
+            <button class="btn add-cart" type="button">Add to Cart</button>
           </div>
         </div>
       </div>
@@ -407,6 +481,36 @@
     </div>
   </section>
 
+  <!-- FAQ -->
+  <section id="faq" style="background:#0e1118;">
+    <div class="container">
+      <h2 class="section-title reveal">Frequently asked questions</h2>
+      <p class="section-sub reveal">Everything you need to know before you buy.</p>
+      <div class="faq reveal">
+        <div class="faq-item">
+          <button class="faq-q" type="button">How long does shipping take?<span class="chev">⌄</span></button>
+          <div class="faq-a"><p>Orders over $50 ship free and arrive within 2 business days in the continental US. International delivery takes 5–9 business days.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">What's your return policy?<span class="chev">⌄</span></button>
+          <div class="faq-a"><p>You have 30 days from delivery to return any device for a full refund — no questions asked. Returns are free with a prepaid label.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">Are the devices compatible with my phone?<span class="chev">⌄</span></button>
+          <div class="faq-a"><p>All of our gadgets work with both iOS 15+ and Android 11+, and integrate with major smart-home hubs including Alexa, Google Home, and Apple Home.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">What does the warranty cover?<span class="chev">⌄</span></button>
+          <div class="faq-a"><p>Every device includes a 2-year limited warranty covering manufacturing defects and battery degradation beyond normal wear.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button">Do you offer support after purchase?<span class="chev">⌄</span></button>
+          <div class="faq-a"><p>Yes — our support team is available 24/7 via chat and email, with real humans ready to help with setup, troubleshooting, and more.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Newsletter -->
   <section id="newsletter">
     <div class="container">
@@ -439,8 +543,32 @@
     </div>
   </footer>
 
-  <!-- Floating Buy Now (mobile only) -->
-  <a class="btn buy-now-float" href="#wearables">Buy Now</a>
+  <!-- Sticky add-to-cart bar -->
+  <div class="sticky-bar" id="stickyBar">
+    <div class="container">
+      <div class="sb-info">
+        <span class="sb-name">Pulse Smartwatch · Most Popular</span>
+        <span class="sb-price">$249</span>
+      </div>
+      <button class="btn" type="button" onclick="addToCart('Pulse Smartwatch', 249)">Add to Cart</button>
+    </div>
+  </div>
+
+  <!-- Cart drawer -->
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart">
+    <div class="cart-head">
+      <h3>Your Cart</h3>
+      <button class="cart-close" type="button" onclick="closeCart()" aria-label="Close cart">×</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <p class="cart-empty">Your cart is empty.</p>
+    </div>
+    <div class="cart-foot">
+      <div class="cart-total"><span>Total</span><span id="cartTotal">$0</span></div>
+      <a class="btn" href="#" onclick="event.preventDefault(); alert('Checkout is a demo — no payment is processed.');">Checkout</a>
+    </div>
+  </aside>
 
   <script>
     // Scroll reveal
@@ -479,6 +607,91 @@
       });
     }, { threshold: 0.5 });
     counters.forEach(el => countIO.observe(el));
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-q').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        const ans = item.querySelector('.faq-a');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item.open').forEach(o => {
+          o.classList.remove('open');
+          o.querySelector('.faq-a').style.maxHeight = null;
+        });
+        if (!isOpen) {
+          item.classList.add('open');
+          ans.style.maxHeight = ans.scrollHeight + 'px';
+        }
+      });
+    });
+
+    // Cart
+    const cart = [];
+    const cartItemsEl = document.getElementById('cartItems');
+    const cartTotalEl = document.getElementById('cartTotal');
+    const navCountEl = document.getElementById('navCount');
+    const fmt = n => '$' + n.toLocaleString();
+
+    function addToCart(name, price) {
+      const existing = cart.find(i => i.name === name);
+      if (existing) existing.qty++;
+      else cart.push({ name, price, qty: 1 });
+      renderCart();
+      openCart();
+    }
+    function removeFromCart(name) {
+      const idx = cart.findIndex(i => i.name === name);
+      if (idx > -1) cart.splice(idx, 1);
+      renderCart();
+    }
+    function renderCart() {
+      const count = cart.reduce((s, i) => s + i.qty, 0);
+      const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      navCountEl.textContent = count;
+      cartTotalEl.textContent = fmt(total);
+      if (!cart.length) {
+        cartItemsEl.innerHTML = '<p class="cart-empty">Your cart is empty.</p>';
+        return;
+      }
+      cartItemsEl.innerHTML = cart.map(i => `
+        <div class="cart-line">
+          <div>
+            <div class="cl-name">${i.name}</div>
+            <div class="cl-qty">Qty ${i.qty} · ${fmt(i.price)} each</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span class="cl-price">${fmt(i.price * i.qty)}</span>
+            <button class="cl-remove" type="button" onclick="removeFromCart('${i.name.replace(/'/g, "\\'")}')" aria-label="Remove">×</button>
+          </div>
+        </div>`).join('');
+    }
+    function openCart() {
+      document.getElementById('cartDrawer').classList.add('open');
+      document.getElementById('cartOverlay').classList.add('open');
+    }
+    function closeCart() {
+      document.getElementById('cartDrawer').classList.remove('open');
+      document.getElementById('cartOverlay').classList.remove('open');
+    }
+
+    // Wire product "Add to Cart" buttons (read name + price from card)
+    document.querySelectorAll('.add-cart').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const card = btn.closest('.card');
+        const name = card.querySelector('h3').textContent.trim();
+        const price = parseFloat(card.querySelector('.price').textContent.replace(/[^0-9.]/g, ''));
+        addToCart(name, price);
+      });
+    });
+
+    // Sticky add-to-cart bar — show after scrolling past the hero
+    const stickyBar = document.getElementById('stickyBar');
+    const heroEl = document.querySelector('.hero');
+    window.addEventListener('scroll', () => {
+      const past = window.scrollY > (heroEl.offsetTop + heroEl.offsetHeight);
+      const nearBottom = (window.innerHeight + window.scrollY) > (document.body.offsetHeight - 200);
+      stickyBar.classList.toggle('show', past && !nearBottom);
+    }, { passive: true });
   </script>
 </body>
 </html>
