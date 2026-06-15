@@ -1,0 +1,19 @@
+# internal tooling / screenshots
+.shots/
+.vercel/
+
+# skill/reference docs (not part of the site)
+FRONT END.md
+VIDEO TO WEBSITE.md
+
+# plan files
+*.plan.md
+
+# OS
+Thumbs.db
+.DS_Store
+
+# keep only the two frames used as video posters
+frames/*
+!frames/frame_0001.webp
+!frames/frame_0060.webp
