@@ -89,10 +89,77 @@
     .footer-links a:hover { color: var(--text); }
     .socials { display: flex; gap: 18px; justify-content: center; margin-bottom: 18px; font-size: 1.3rem; }
 
+    /* Most Popular badge */
+    .card { position: relative; }
+    .badge {
+      position: absolute; top: 14px; right: 14px; z-index: 2;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em;
+      padding: 5px 12px; border-radius: 999px; text-transform: uppercase;
+      box-shadow: 0 6px 18px rgba(124,92,255,0.4);
+    }
+
+    /* Scroll reveal animation */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* Marquee ticker */
+    .marquee { overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: #0e1118; padding: 16px 0; }
+    .marquee-track { display: flex; gap: 56px; width: max-content; animation: scroll-left 24s linear infinite; }
+    .marquee-track span { color: var(--muted); font-weight: 600; letter-spacing: 0.06em; white-space: nowrap; font-size: 0.95rem; }
+    .marquee:hover .marquee-track { animation-play-state: paused; }
+    @keyframes scroll-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* Feature highlights (icon chips) */
+    .features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .feature { text-align: center; padding: 24px 16px; }
+    .feature .fi { font-size: 2rem; margin-bottom: 10px; }
+    .feature h4 { font-size: 1rem; margin-bottom: 6px; }
+    .feature p { color: var(--muted); font-size: 0.88rem; }
+
+    /* Stat counters */
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: center; }
+    .stat .num { font-size: 2.6rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat .label { color: var(--muted); font-size: 0.95rem; margin-top: 4px; }
+
+    /* Comparison table */
+    .compare-wrap { overflow-x: auto; }
+    table.compare { width: 100%; border-collapse: collapse; min-width: 520px; }
+    table.compare th, table.compare td { padding: 16px 18px; text-align: center; border-bottom: 1px solid var(--border); }
+    table.compare th { font-size: 1.05rem; }
+    table.compare th:first-child, table.compare td:first-child { text-align: left; color: var(--muted); }
+    table.compare thead th { background: var(--panel); }
+    table.compare .pick { color: var(--accent); border-top: 2px solid var(--accent); border-bottom: 2px solid var(--accent); }
+    table.compare .yes { color: var(--accent); }
+    table.compare .no { color: #5a6373; }
+
+    /* Reviews */
+    .reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .review { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 26px 24px; }
+    .review .stars { color: #ffc24b; font-size: 1.05rem; margin-bottom: 12px; letter-spacing: 2px; }
+    .review p { font-size: 0.96rem; margin-bottom: 16px; }
+    .review .who { color: var(--muted); font-size: 0.88rem; font-weight: 600; }
+
+    /* Newsletter */
+    .newsletter { background: linear-gradient(135deg, rgba(91,140,255,0.12), rgba(124,92,255,0.12)); border: 1px solid var(--border); border-radius: 20px; padding: 48px 32px; text-align: center; }
+    .newsletter form { display: flex; gap: 12px; max-width: 460px; margin: 24px auto 0; }
+    .newsletter input { flex: 1; padding: 13px 16px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 1rem; }
+    .newsletter input:focus { outline: none; border-color: var(--accent); }
+
+    /* Floating Buy Now (mobile) */
+    .buy-now-float {
+      display: none; position: fixed; left: 20px; right: 20px; bottom: 20px; z-index: 50;
+      text-align: center; padding: 15px; font-size: 1.05rem;
+    }
+
     @media (max-width: 820px) {
-      .grid { grid-template-columns: 1fr; }
+      .grid, .reviews, .stats, .features { grid-template-columns: 1fr; }
+      .features { grid-template-columns: repeat(2, 1fr); }
+      .stats { grid-template-columns: repeat(2, 1fr); }
       .hero h1 { font-size: 2.4rem; }
       .nav-links { display: none; }
+      .newsletter form { flex-direction: column; }
+      .buy-now-float { display: block; }
     }
   </style>
 </head>
@@ -105,6 +172,8 @@
           <a href="#wearables">Wearables</a>
           <a href="#smart-home">Smart Home</a>
           <a href="#audio">Audio &amp; Assistants</a>
+          <a href="#compare">Compare</a>
+          <a href="#reviews">Reviews</a>
           <a href="product.html">Home</a>
         </div>
         <a class="btn" href="#wearables">Shop Now</a>
@@ -121,6 +190,26 @@
     </div>
   </section>
 
+  <!-- Brand / feature marquee -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>⌚ Smartwatches</span><span>🕶️ Smart Glasses</span><span>🔊 Voice Assistants</span><span>📷 Smart Cameras</span><span>💡 Smart Lighting</span><span>🎧 Wireless Audio</span><span>🌡️ Smart Climate</span><span>🏠 Home Automation</span>
+      <span>⌚ Smartwatches</span><span>🕶️ Smart Glasses</span><span>🔊 Voice Assistants</span><span>📷 Smart Cameras</span><span>💡 Smart Lighting</span><span>🎧 Wireless Audio</span><span>🌡️ Smart Climate</span><span>🏠 Home Automation</span>
+    </div>
+  </div>
+
+  <!-- Feature highlights -->
+  <section id="highlights">
+    <div class="container">
+      <div class="features">
+        <div class="feature reveal"><div class="fi">🔋</div><h4>All-Day Battery</h4><p>Up to 7 days on a single charge.</p></div>
+        <div class="feature reveal"><div class="fi">📶</div><h4>Seamless Connectivity</h4><p>Wi-Fi 6, Bluetooth 5.3 &amp; 5G ready.</p></div>
+        <div class="feature reveal"><div class="fi">🤝</div><h4>Universal Compatibility</h4><p>Works with iOS, Android &amp; major hubs.</p></div>
+        <div class="feature reveal"><div class="fi">🔒</div><h4>Private &amp; Secure</h4><p>End-to-end encryption by default.</p></div>
+      </div>
+    </div>
+  </section>
+
   <!-- Wearables -->
   <section id="wearables">
     <div class="container">
@@ -128,6 +217,7 @@
       <p class="section-sub">Track your day, your health, and your world — right from your wrist and eyes.</p>
       <div class="grid">
         <div class="card">
+          <span class="badge">Most Popular</span>
           <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=600&q=80" alt="Pulse Smartwatch" />
           <div class="body">
             <h3>Pulse Smartwatch</h3>
@@ -235,6 +325,102 @@
     </div>
   </section>
 
+  <!-- Stat counters -->
+  <section id="stats" style="background:#0e1118;">
+    <div class="container">
+      <h2 class="section-title reveal">By the numbers</h2>
+      <p class="section-sub reveal">Trusted by people who expect more from their tech.</p>
+      <div class="stats">
+        <div class="stat reveal"><div class="num" data-target="10" data-suffix="M+">0</div><div class="label">Devices sold</div></div>
+        <div class="stat reveal"><div class="num" data-target="180" data-suffix="+">0</div><div class="label">Countries shipped</div></div>
+        <div class="stat reveal"><div class="num" data-target="4.9" data-suffix="★" data-decimals="1">0</div><div class="label">Average rating</div></div>
+        <div class="stat reveal"><div class="num" data-target="24" data-suffix="/7">0</div><div class="label">Support</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison table -->
+  <section id="compare">
+    <div class="container">
+      <h2 class="section-title reveal">Compare top picks</h2>
+      <p class="section-sub reveal">Our three best-selling devices, side by side.</p>
+      <div class="compare-wrap reveal">
+        <table class="compare">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Pulse Smartwatch</th>
+              <th class="pick">Vision Glasses</th>
+              <th>Nova Assistant</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Price</td><td>$249</td><td class="pick">$399</td><td>$99</td></tr>
+            <tr><td>Battery life</td><td>7 days</td><td class="pick">2 days</td><td>Wired</td></tr>
+            <tr><td>Built-in display</td><td class="yes">✓</td><td class="pick yes">✓</td><td class="no">—</td></tr>
+            <tr><td>Voice control</td><td class="yes">✓</td><td class="pick yes">✓</td><td class="yes">✓</td></tr>
+            <tr><td>Camera</td><td class="no">—</td><td class="pick yes">✓</td><td class="no">—</td></tr>
+            <tr><td>Water resistant</td><td class="yes">✓</td><td class="pick yes">✓</td><td class="no">—</td></tr>
+            <tr><td></td><td><a class="btn secondary" style="margin:0;" href="#">Choose</a></td><td class="pick"><a class="btn" style="margin:0;" href="#">Choose</a></td><td><a class="btn secondary" style="margin:0;" href="#">Choose</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Customer reviews -->
+  <section id="reviews" style="background:#0e1118;">
+    <div class="container">
+      <h2 class="section-title reveal">What customers say</h2>
+      <p class="section-sub reveal">Over 50,000 five-star reviews and counting.</p>
+      <div class="reviews">
+        <div class="review reveal">
+          <div class="stars">★★★★★</div>
+          <p>"The Pulse Smartwatch genuinely changed my routine — battery lasts a full week and the health tracking is spot on."</p>
+          <div class="who">— Maya R., verified buyer</div>
+        </div>
+        <div class="review reveal">
+          <div class="stars">★★★★★</div>
+          <p>"Vision Glasses feel like the future. Notifications, directions, and calls without ever pulling out my phone."</p>
+          <div class="who">— Daniel K., verified buyer</div>
+        </div>
+        <div class="review reveal">
+          <div class="stars">★★★★☆</div>
+          <p>"The Nova Assistant runs my whole home now. Setup took five minutes and it just works with everything."</p>
+          <div class="who">— Priya S., verified buyer</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why choose us -->
+  <section id="why">
+    <div class="container">
+      <h2 class="section-title reveal">Why choose us</h2>
+      <p class="section-sub reveal">More than gadgets — a smarter way to live.</p>
+      <div class="features">
+        <div class="feature reveal"><div class="fi">🚚</div><h4>Free 2-Day Shipping</h4><p>On every order, no minimum.</p></div>
+        <div class="feature reveal"><div class="fi">↩️</div><h4>30-Day Returns</h4><p>Love it or send it back, free.</p></div>
+        <div class="feature reveal"><div class="fi">🛡️</div><h4>2-Year Warranty</h4><p>Coverage on all devices.</p></div>
+        <div class="feature reveal"><div class="fi">💬</div><h4>24/7 Support</h4><p>Real humans, anytime.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section id="newsletter">
+    <div class="container">
+      <div class="newsletter reveal">
+        <h2 class="section-title" style="margin-bottom:8px;">Stay in the loop</h2>
+        <p class="section-sub" style="margin-bottom:0;">Get early access to drops, deals, and product news.</p>
+        <form onsubmit="event.preventDefault(); this.querySelector('input').value=''; this.querySelector('button').textContent='Subscribed ✓';">
+          <input type="email" placeholder="you@email.com" required aria-label="Email address" />
+          <button class="btn" type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
   <footer>
     <div class="container">
       <div class="footer-links">
@@ -252,5 +438,47 @@
       <p>&copy; 2026 Tester Tech by Nova. All rights reserved.</p>
     </div>
   </footer>
+
+  <!-- Floating Buy Now (mobile only) -->
+  <a class="btn buy-now-float" href="#wearables">Buy Now</a>
+
+  <script>
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => io.observe(el));
+
+    // Animated stat counters
+    const counters = document.querySelectorAll('.num');
+    const countIO = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target;
+        const target = parseFloat(el.dataset.target);
+        const decimals = parseInt(el.dataset.decimals || '0', 10);
+        const suffix = el.dataset.suffix || '';
+        const duration = 1600;
+        let startTime = null;
+        function tick(ts) {
+          if (!startTime) startTime = ts;
+          const p = Math.min((ts - startTime) / duration, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          const val = (target * eased).toFixed(decimals);
+          el.textContent = val + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        countIO.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(el => countIO.observe(el));
+  </script>
 </body>
 </html>
