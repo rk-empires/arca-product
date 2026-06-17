@@ -131,6 +131,10 @@
     }
     .field textarea { resize: vertical; min-height: 120px; }
     .contact-form .btn { justify-self: start; border: none; cursor: pointer; font-family: var(--mono); }
+    .contact-form .btn[disabled] { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .form-status { font-size: 0.9rem; min-height: 1.2em; margin: 0; }
+    .form-status.ok { color: var(--accent); }
+    .form-status.err { color: #e58a6f; }
 
     footer { border-top: 1px solid var(--border); padding: 32px 0; text-align: center; color: var(--muted); font-size: 0.9rem; }
 
@@ -313,6 +317,7 @@
           <textarea id="contact-message" name="message" placeholder="How can we help?"></textarea>
         </div>
         <button class="btn" type="submit">Send message</button>
+        <p class="form-status" role="status" aria-live="polite"></p>
       </form>
     </div>
   </section>
@@ -322,5 +327,51 @@
       <p>&copy; 2026 Nova. All rights reserved. · <a href="product.html" style="color:var(--accent);">Back to Home</a></p>
     </div>
   </footer>
+
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    const SUPABASE_URL = "https://oywmcuoziylczkfstoyu.supabase.co";
+    // Public anon key — safe to expose in the browser. Replace the placeholder below.
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95d21jdW96aXlsY3prZnN0b3l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2OTI4ODQsImV4cCI6MjA5NzI2ODg4NH0.PqdiZ2RYXmGh7ke-QKFj3Rvv3gzLEefWpuODrh1zkoY";
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const form = document.querySelector(".contact-form");
+    const status = form.querySelector(".form-status");
+    const button = form.querySelector("button[type=submit]");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      status.className = "form-status";
+      status.textContent = "";
+
+      const payload = {
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        message: form.message.value.trim() || null,
+      };
+
+      button.disabled = true;
+      const original = button.textContent;
+      button.textContent = "Sending…";
+
+      const { error } = await supabase.from("signups").insert(payload);
+
+      button.disabled = false;
+      button.textContent = original;
+
+      if (error) {
+        status.classList.add("err");
+        status.textContent = "Something went wrong. Please try again.";
+        console.error(error);
+        return;
+      }
+
+      form.reset();
+      status.classList.add("ok");
+      status.textContent = "Thanks — we'll be in touch.";
+    });
+  </script>
 </body>
 </html>
