@@ -303,7 +303,7 @@
     <div class="container">
       <h2 class="section-title">Get in touch</h2>
       <p class="section-sub">Tell us what you're building and we'll get back to you.</p>
-      <form class="contact-form" action="" method="post">
+      <form class="contact-form" action="/api/contact" method="post">
         <div class="field">
           <label for="contact-name">Name<span class="req">*</span></label>
           <input id="contact-name" name="name" type="text" placeholder="Your name" required />
@@ -328,15 +328,7 @@
     </div>
   </footer>
 
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-    const SUPABASE_URL = "https://oywmcuoziylczkfstoyu.supabase.co";
-    // Public anon key — safe to expose in the browser. Replace the placeholder below.
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95d21jdW96aXlsY3prZnN0b3l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2OTI4ODQsImV4cCI6MjA5NzI2ODg4NH0.PqdiZ2RYXmGh7ke-QKFj3Rvv3gzLEefWpuODrh1zkoY";
-
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+  <script>
     const form = document.querySelector(".contact-form");
     const status = form.querySelector(".form-status");
     const button = form.querySelector("button[type=submit]");
@@ -356,21 +348,29 @@
       const original = button.textContent;
       button.textContent = "Sending…";
 
-      const { error } = await supabase.from("signups").insert(payload);
+      try {
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const result = await res.json().catch(() => ({}));
 
-      button.disabled = false;
-      button.textContent = original;
+        if (!res.ok || !result.ok) {
+          throw new Error(result.error || "Request failed");
+        }
 
-      if (error) {
+        form.reset();
+        status.classList.add("ok");
+        status.textContent = "Thanks — we'll be in touch.";
+      } catch (err) {
         status.classList.add("err");
         status.textContent = "Something went wrong. Please try again.";
-        console.error(error);
-        return;
+        console.error(err);
+      } finally {
+        button.disabled = false;
+        button.textContent = original;
       }
-
-      form.reset();
-      status.classList.add("ok");
-      status.textContent = "Thanks — we'll be in touch.";
     });
   </script>
 </body>

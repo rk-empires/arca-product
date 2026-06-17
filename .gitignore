@@ -13,6 +13,9 @@ VIDEO TO WEBSITE.md
 # plan files
 *.plan.md
 
+# node
+node_modules/
+
 # OS
 Thumbs.db
 .DS_Store
