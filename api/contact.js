@@ -24,18 +24,18 @@ export default async function handler(req, res) {
     return res.status(400).json({ ok: false, error: "Name and email are required." });
   }
 
-  const { data, error } = await supabase
+  // No .select() here: RLS grants anon INSERT only (no SELECT), so reading
+  // the row back would fail. Insert with return=minimal instead.
+  const { error } = await supabase
     .from("signups")
-    .insert({ name, email, message })
-    .select()
-    .single();
+    .insert({ name, email, message });
 
   if (error) {
     console.error("Supabase insert error:", error);
     return res.status(500).json({ ok: false, error: "Could not save your submission." });
   }
 
-  return res.status(200).json({ ok: true, data });
+  return res.status(200).json({ ok: true });
 }
 
 function safeParse(str) {
