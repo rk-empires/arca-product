@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nova — Product</title>
+  <title>RK Empires — Intelligent Automations</title>
 
-  <!-- Fonts aligned with anything.html (Éclat) -->
+  <!-- Brand fonts: Playfair Display (display) + Montserrat (body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
 
   <style>
     :root {
-      /* palette copied from anything.html (Éclat) */
+      /* RK Empires palette — gold on black */
       --bg: #0a0805;
       --panel: #100c07;
       --text: #f4ece0;
@@ -20,8 +20,8 @@
       --accent: #e7c789;
       --accent-2: #b8975a;
       --border: rgba(231,199,137,0.16);
-      --serif: "Instrument Serif", Georgia, serif;
-      --mono: "Space Mono", ui-monospace, monospace;
+      --serif: "Playfair Display", Georgia, serif;
+      --mono: "Montserrat", system-ui, sans-serif;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -36,7 +36,7 @@
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
     a { color: inherit; text-decoration: none; }
-    h1, h2, h3, .logo, .section-title, .price { font-family: var(--serif); font-weight: 400; }
+    h1, h2, h3, .logo, .section-title, .price { font-family: var(--serif); font-weight: 700; }
     .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
     header {
@@ -45,9 +45,14 @@
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border);
     }
-    nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
-    .logo { font-weight: 700; font-size: 1.2rem; letter-spacing: -0.02em; }
-    .logo span { color: var(--accent); }
+    nav { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .logo { display: flex; align-items: center; gap: 11px; font-size: 1.15rem; letter-spacing: 0.01em; }
+    .logo-mark {
+      width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
+      border: 1px solid var(--border); flex-shrink: 0;
+    }
+    .logo-text { color: var(--text); }
+    .logo-text span { color: var(--accent); }
     .nav-links { display: flex; gap: 28px; }
     .nav-links a { color: var(--muted); font-size: 0.95rem; transition: color .2s; }
     .nav-links a:hover { color: var(--text); }
@@ -57,7 +62,12 @@
       text-align: center;
       background: radial-gradient(900px 400px at 50% -10%, rgba(231,199,137,0.16), transparent);
     }
-    .hero h1 { font-size: 3rem; letter-spacing: -0.03em; margin-bottom: 18px; }
+    .eyebrow {
+      font-family: var(--mono); font-size: 0.8rem; font-weight: 600;
+      letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent);
+      margin-bottom: 20px;
+    }
+    .hero h1 { font-size: 3.2rem; line-height: 1.1; letter-spacing: -0.02em; margin: 0 auto 18px; max-width: 760px; }
     .hero p { color: var(--muted); font-size: 1.2rem; max-width: 620px; margin: 0 auto 32px; }
     .btn {
       display: inline-block;
@@ -149,63 +159,66 @@
   <header>
     <div class="container">
       <nav>
-        <a class="logo" href="product.html">Nova<span>.</span></a>
+        <a class="logo" href="product.html">
+          <img class="logo-mark" src="assets/rk-empires-logo.jpg" alt="RK Empires crest" />
+          <span class="logo-text">RK <span>Empires</span></span>
+        </a>
         <div class="nav-links">
-          <a href="#features">Features</a>
+          <a href="#services">Services</a>
+          <a href="#how">How We Work</a>
           <a href="#pricing">Pricing</a>
-          <a href="anything.html">Experience</a>
-          <a href="anything.html">Éclat Edition</a>
-          <a href="sights.html">Sights</a>
-          <a href="product.html">Home</a>
+          <a href="sights.html">Gallery</a>
+          <a href="#contact">Contact</a>
         </div>
-        <a class="btn" href="anything.html" style="color:#fff;">Discover Éclat →</a>
+        <a class="btn" href="#contact">Book a Call →</a>
       </nav>
     </div>
   </header>
 
   <section class="hero">
     <div class="container">
-      <h1>Meet Nova</h1>
-      <p>The all-in-one platform that helps your team ship faster, stay organized, and scale without the chaos.</p>
-      <a class="btn" href="#pricing">Start Free Trial</a>
-      <a class="btn secondary" href="anything.html">See the Éclat Edition</a>
+      <p class="eyebrow">Automate · Innovate · Elevate</p>
+      <h1>Intelligent automations for businesses ready to scale</h1>
+      <p>RK Empires designs intelligent, custom automations that eliminate repetitive work, unlock growth, and free your team to focus on what actually matters.</p>
+      <a class="btn" href="#contact">Book a Free Consultation</a>
+      <a class="btn secondary" href="#services">See What We Do</a>
     </div>
   </section>
 
-  <section id="features">
+  <section id="services">
     <div class="container">
-      <h2 class="section-title">Everything you need</h2>
-      <p class="section-sub">Powerful features designed to make your workflow effortless.</p>
+      <h2 class="section-title">What we automate</h2>
+      <p class="section-sub">Intelligent systems that take the busywork off your plate — built around how your business actually runs.</p>
       <div class="grid">
         <div class="card">
-          <div class="icon">⚡</div>
-          <h3>Lightning Fast</h3>
-          <p>Built for speed with an optimized engine that keeps you moving without delays.</p>
+          <div class="icon">⚙️</div>
+          <h3>Workflow Automation</h3>
+          <p>Connect your tools and let repetitive, multi-step processes run themselves, end to end.</p>
         </div>
         <div class="card">
-          <div class="icon">🔒</div>
-          <h3>Secure by Default</h3>
-          <p>Enterprise-grade encryption and access controls protect your data end to end.</p>
+          <div class="icon">🤖</div>
+          <h3>AI Solutions</h3>
+          <p>Custom AI agents and assistants that handle support, data entry, and everyday decisions.</p>
         </div>
         <div class="card">
           <div class="icon">🔗</div>
-          <h3>Integrations</h3>
-          <p>Connect with the tools you already use — no complex setup required.</p>
+          <h3>Seamless Integrations</h3>
+          <p>We wire up the apps you already use so data flows between them without manual handoffs.</p>
         </div>
         <div class="card">
           <div class="icon">📊</div>
           <h3>Insightful Analytics</h3>
-          <p>Real-time dashboards turn your raw data into decisions you can act on.</p>
+          <p>Turn scattered data into real-time dashboards that surface decisions you can act on.</p>
         </div>
         <div class="card">
-          <div class="icon">🤝</div>
-          <h3>Team Collaboration</h3>
-          <p>Share, comment, and work together in real time from anywhere.</p>
+          <div class="icon">🚀</div>
+          <h3>Growth Systems</h3>
+          <p>Automated lead capture, nurture, and follow-up that compounds quietly in the background.</p>
         </div>
         <div class="card">
-          <div class="icon">🌐</div>
-          <h3>Works Everywhere</h3>
-          <p>Native apps for web, desktop, and mobile keep you in sync across devices.</p>
+          <div class="icon">🛡️</div>
+          <h3>Reliable &amp; Secure</h3>
+          <p>Monitored, resilient automations with security and access controls built in from the start.</p>
         </div>
       </div>
     </div>
@@ -213,68 +226,68 @@
 
   <section id="pricing" style="background: #0d0a06;">
     <div class="container">
-      <h2 class="section-title">Simple pricing</h2>
-      <p class="section-sub">Choose the plan that fits your team. No hidden fees.</p>
+      <h2 class="section-title">Ways to work with us</h2>
+      <p class="section-sub">Start with a free audit, or partner with us to build and run your automations.</p>
       <div class="pricing">
         <div class="price-card">
-          <h3>Starter</h3>
-          <div class="price">$0<small>/mo</small></div>
+          <h3>Automation Audit</h3>
+          <div class="price">Free</div>
           <ul>
-            <li>Up to 3 projects</li>
-            <li>Basic analytics</li>
-            <li>Community support</li>
+            <li>Process &amp; tooling review</li>
+            <li>Automation opportunity map</li>
+            <li>ROI &amp; time-savings estimate</li>
           </ul>
-          <a class="btn secondary" href="#" style="margin:0;">Get Started</a>
+          <a class="btn secondary" href="#contact" style="margin:0;">Book free audit</a>
         </div>
         <div class="price-card featured">
-          <h3>Pro</h3>
-          <div class="price">$24<small>/mo</small></div>
+          <h3>Growth</h3>
+          <div class="price">$1,500<small>/mo</small></div>
           <ul>
-            <li>Unlimited projects</li>
-            <li>Advanced analytics</li>
+            <li>Done-for-you automations</li>
+            <li>Tool &amp; API integrations</li>
+            <li>Monthly optimization</li>
             <li>Priority support</li>
-            <li>Integrations</li>
           </ul>
-          <a class="btn" href="#" style="margin:0;">Start Free Trial</a>
+          <a class="btn" href="#contact" style="margin:0;">Get started</a>
         </div>
         <div class="price-card">
           <h3>Enterprise</h3>
           <div class="price">Custom</div>
           <ul>
-            <li>Everything in Pro</li>
-            <li>SSO &amp; SAML</li>
-            <li>Dedicated manager</li>
-            <li>SLA guarantee</li>
+            <li>Everything in Growth</li>
+            <li>Custom AI solutions</li>
+            <li>Dedicated automation team</li>
+            <li>SLA &amp; SSO</li>
           </ul>
-          <a class="btn secondary" href="#" style="margin:0;">Contact Sales</a>
+          <a class="btn secondary" href="#contact" style="margin:0;">Contact us</a>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="products">
+  <section id="how">
     <div class="container">
-      <h2 class="section-title">Products</h2>
-      <p class="section-sub">A growing suite of products built to help your team do its best work.</p>
+      <h2 class="section-title">How we work</h2>
+      <p class="section-sub">Three principles guide every system we build — automate the busywork, innovate the approach, elevate the business.</p>
       <div class="grid">
         <div class="card">
-          <div class="icon">🚀</div>
-          <h3>Nova Platform</h3>
-          <p>The flagship all-in-one workspace for planning, building, and shipping faster.</p>
+          <div class="icon">⚙️</div>
+          <h3>Automate</h3>
+          <p>We eliminate repetitive, manual tasks so your team reclaims hours every single week.</p>
         </div>
         <div class="card">
-          <div class="icon">📊</div>
-          <h3>Nova Analytics</h3>
-          <p>Real-time dashboards and insights that turn your data into decisions.</p>
+          <div class="icon">💡</div>
+          <h3>Innovate</h3>
+          <p>We design intelligent, tailored solutions that fit exactly how your business actually runs.</p>
         </div>
         <div class="card">
-          <div class="icon">🤝</div>
-          <h3>Nova Teams</h3>
-          <p>Collaboration tools that keep everyone in sync, wherever they work.</p>
+          <div class="icon">📈</div>
+          <h3>Elevate</h3>
+          <p>We help you scale with dependable systems that keep growing right alongside you.</p>
         </div>
       </div>
       <div style="text-align:center; margin-top:48px;">
-        <a class="btn" href="product.html">View Product Page</a>
+        <a class="btn" href="#contact">Start with a free audit</a>
       </div>
     </div>
   </section>
@@ -282,7 +295,7 @@
   <section id="tester-tech" style="background: #0d0a06;">
     <div class="container">
       <h2 class="section-title">Tester Tech</h2>
-      <p class="section-sub">Cutting-edge tooling and instrumentation for putting Nova through its paces.</p>
+      <p class="section-sub">The tooling and instrumentation we use to validate every automation before it ships.</p>
       <div style="text-align:center;">
         <a class="btn" href="TesterTech.html">Explore Tester Tech →</a>
       </div>
@@ -292,7 +305,7 @@
   <section id="sights">
     <div class="container">
       <h2 class="section-title">Sights</h2>
-      <p class="section-sub">A visual gallery of the Nova lineup and the worlds these gadgets live in.</p>
+      <p class="section-sub">A visual gallery of the systems we build and the worlds they run in.</p>
       <div style="text-align:center;">
         <a class="btn" href="sights.html">View the Gallery →</a>
       </div>
@@ -301,8 +314,8 @@
 
   <section id="contact" style="background: #0d0a06;">
     <div class="container">
-      <h2 class="section-title">Get in touch</h2>
-      <p class="section-sub">Tell us what you're building and we'll get back to you.</p>
+      <h2 class="section-title">Let's automate it</h2>
+      <p class="section-sub">Tell us what's slowing your team down and we'll show you what we can automate.</p>
       <form class="contact-form" action="/api/contact" method="post">
         <div class="field">
           <label for="contact-name">Name<span class="req">*</span></label>
@@ -324,7 +337,7 @@
 
   <footer>
     <div class="container">
-      <p>&copy; 2026 Nova. All rights reserved. · <a href="product.html" style="color:var(--accent);">Back to Home</a></p>
+      <p>&copy; 2026 RK Empires — Intelligent Automations. · Automate · Innovate · Elevate</p>
     </div>
   </footer>
 
