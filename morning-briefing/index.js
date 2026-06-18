@@ -2,6 +2,7 @@ import "dotenv/config";
 import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
 import Anthropic from "@anthropic-ai/sdk";
+import { pathToFileURL } from "node:url";
 
 const BRAND = process.env.BRAND || "RK Empires";
 // Until a domain is verified in Resend, onboarding@resend.dev is the only
@@ -139,10 +140,13 @@ ${formatSignupList(signups)}`;
   console.log("Sent daily briefing email.");
 }
 
-// Execute once when run directly (node index.js), then exit.
-runBriefing()
-  .then(() => process.exit(0))
-  .catch((err) => {
-    console.error("Briefing failed:", err.message);
-    process.exit(1);
-  });
+// Execute once when run directly (node index.js), then exit. Guarded so that
+// importing runBriefing (e.g. from scheduler.js) does NOT trigger a run.
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  runBriefing()
+    .then(() => process.exit(0))
+    .catch((err) => {
+      console.error("Briefing failed:", err.message);
+      process.exit(1);
+    });
+}

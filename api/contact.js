@@ -36,13 +36,63 @@ export default async function handler(req, res) {
     return res.status(500).json({ ok: false, error: "Could not save your submission." });
   }
 
-  // Send a confirmation email — best effort. A Resend failure must NOT fail
-  // the submission, since the row is already safely saved.
+  // Notify the site owner of the new submission — best effort. A Resend
+  // failure must NOT fail the submission, since the row is already saved.
+  await notifyOwner({ name, email, message }).catch((err) => {
+    console.error("Resend owner-notification error (non-fatal):", err);
+  });
+
+  // Send a confirmation email to the visitor — best effort. Note: with the
+  // Resend sandbox sender this only delivers to the account owner's address;
+  // arbitrary visitors require a verified domain. Failure is non-fatal.
   await sendConfirmation({ name, email }).catch((err) => {
     console.error("Resend email error (non-fatal):", err);
   });
 
   return res.status(200).json({ ok: true });
+}
+
+async function notifyOwner({ name, email, message }) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    console.warn("RESEND_API_KEY not set — skipping owner notification.");
+    return;
+  }
+
+  // Where submission alerts are sent. Must be the Resend account owner's
+  // address while on the sandbox sender (onboarding@resend.dev).
+  const notifyTo = process.env.NOTIFY_EMAIL || process.env.MY_EMAIL;
+  if (!notifyTo) {
+    console.warn("NOTIFY_EMAIL/MY_EMAIL not set — skipping owner notification.");
+    return;
+  }
+
+  const resend = new Resend(apiKey);
+  const from = process.env.RESEND_FROM || "RK Empires <onboarding@resend.dev>";
+  const msg = message || "(no message)";
+
+  const { error } = await resend.emails.send({
+    from,
+    to: notifyTo,
+    // Lets you reply straight to the visitor from your inbox.
+    replyTo: email,
+    subject: `New contact submission from ${name}`,
+    text:
+`New submission from the RK Empires contact form:
+
+Name:    ${name}
+Email:   ${email}
+Message: ${msg}`,
+    html:
+`<div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.7;color:#2a241b;">
+  <p style="margin:0 0 12px;"><strong>New submission from the RK&nbsp;Empires contact form:</strong></p>
+  <p style="margin:0;"><strong>Name:</strong> ${escapeHtml(name)}</p>
+  <p style="margin:0;"><strong>Email:</strong> ${escapeHtml(email)}</p>
+  <p style="margin:12px 0 0;"><strong>Message:</strong><br/>${escapeHtml(msg).replace(/\n/g, "<br/>")}</p>
+</div>`,
+  });
+
+  if (error) throw error;
 }
 
 async function sendConfirmation({ name, email }) {

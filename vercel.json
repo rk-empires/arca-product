@@ -1,4 +1,5 @@
 {
+  "cleanUrls": true,
   "redirects": [
     { "source": "/", "destination": "/product.html", "permanent": false }
   ]

@@ -5,8 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "send-now": "node index.js --now"
+    "start": "node scheduler.js",
+    "send-now": "node index.js"
   },
   "license": "MIT",
   "dependencies": {
