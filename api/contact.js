@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { Resend } from "resend";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -35,7 +36,56 @@ export default async function handler(req, res) {
     return res.status(500).json({ ok: false, error: "Could not save your submission." });
   }
 
+  // Send a confirmation email — best effort. A Resend failure must NOT fail
+  // the submission, since the row is already safely saved.
+  await sendConfirmation({ name, email }).catch((err) => {
+    console.error("Resend email error (non-fatal):", err);
+  });
+
   return res.status(200).json({ ok: true });
+}
+
+async function sendConfirmation({ name, email }) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    console.warn("RESEND_API_KEY not set — skipping confirmation email.");
+    return;
+  }
+
+  const resend = new Resend(apiKey);
+  // Use onboarding@resend.dev until a domain is verified, then swap to it.
+  const from = process.env.RESEND_FROM || "RK Empires <onboarding@resend.dev>";
+  const firstName = name.split(/\s+/)[0] || name;
+
+  const { error } = await resend.emails.send({
+    from,
+    to: email,
+    subject: `Thanks for reaching out, ${firstName}`,
+    text:
+`Hi ${firstName},
+
+Thank you for reaching out to RK Empires — your message landed with us, and we're glad you did.
+
+We build intelligent automations that give teams back their time, and we'll be in touch shortly to talk through what you're looking to do.
+
+Talk soon,
+The RK Empires Team`,
+    html:
+`<div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.7;color:#2a241b;">
+  <p>Hi ${escapeHtml(firstName)},</p>
+  <p>Thank you for reaching out to <strong>RK&nbsp;Empires</strong> — your message landed with us, and we're glad you did.</p>
+  <p>We build intelligent automations that give teams back their time, and we'll be in touch shortly to talk through what you're looking to do.</p>
+  <p style="margin-top:24px;">Talk soon,<br/>The RK&nbsp;Empires Team</p>
+</div>`,
+  });
+
+  if (error) throw error;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => (
+    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+  ));
 }
 
 function safeParse(str) {
