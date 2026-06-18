@@ -16,6 +16,15 @@ VIDEO TO WEBSITE.md
 # node
 node_modules/
 
+# playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+# generated QA artifacts
+/tests/screenshots/
+/tests/qa-report.md
+
 # OS
 Thumbs.db
 .DS_Store
