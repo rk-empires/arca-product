@@ -62,12 +62,12 @@
     }
     .search::placeholder { color: rgba(154,143,126,0.6); }
     .search:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(231,199,137,0.14); }
-    .refresh {
+    .ctl {
       background: transparent; border: 1px solid var(--border); color: var(--muted);
       border-radius: 10px; padding: 12px 18px; font-family: var(--mono); font-size: 0.9rem; cursor: pointer;
       transition: border-color .2s, color .2s;
     }
-    .refresh:hover { border-color: var(--accent); color: var(--text); }
+    .ctl:hover { border-color: var(--accent); color: var(--text); }
 
     .table-wrap { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--panel); margin-bottom: 60px; }
     table { width: 100%; border-collapse: collapse; }
@@ -88,6 +88,32 @@
     .state { padding: 40px 18px; text-align: center; color: var(--muted); }
     .state.err { color: #e58a6f; }
 
+    /* Password gate */
+    #gate {
+      position: fixed; inset: 0; z-index: 50; background: var(--bg);
+      display: flex; align-items: center; justify-content: center; padding: 24px;
+    }
+    #gate.hidden { display: none; }
+    .gate-card {
+      width: 100%; max-width: 380px; background: var(--panel); border: 1px solid var(--border);
+      border-radius: 16px; padding: 36px 32px; text-align: center; position: relative; z-index: 1;
+    }
+    .gate-card .logo-mark { margin: 0 auto 16px; display: block; width: 46px; height: 46px; }
+    .gate-card h2 { font-family: var(--serif); font-weight: 700; font-size: 1.5rem; margin-bottom: 6px; }
+    .gate-card p { color: var(--muted); font-size: 0.9rem; margin-bottom: 22px; }
+    .gate-card input {
+      width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+      color: var(--text); font-family: var(--mono); font-size: 0.95rem; padding: 12px 14px; margin-bottom: 14px;
+    }
+    .gate-card input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(231,199,137,0.14); }
+    .gate-card button {
+      width: 100%; border: none; cursor: pointer; font-family: var(--mono); font-weight: 600;
+      padding: 13px; border-radius: 10px; color: #0a0805;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    }
+    .gate-card button[disabled] { opacity: 0.6; cursor: not-allowed; }
+    .gate-err { color: #e58a6f; font-size: 0.85rem; min-height: 1.1em; margin-top: 12px; }
+
     @media (max-width: 760px) {
       .c-msg { max-width: none; }
       .head h1 { font-size: 1.9rem; }
@@ -99,6 +125,18 @@
   </style>
 </head>
 <body>
+  <!-- Password gate -->
+  <div id="gate">
+    <form class="gate-card" id="gateForm">
+      <img class="logo-mark" src="assets/rk-empires-logo.jpg" alt="RK Empires crest" />
+      <h2>Submissions</h2>
+      <p>Enter the admin password to continue.</p>
+      <input id="gatePass" type="password" placeholder="Admin password" autocomplete="current-password" autofocus />
+      <button type="submit" id="gateBtn">Unlock</button>
+      <div class="gate-err" id="gateErr"></div>
+    </form>
+  </div>
+
   <header>
     <div class="container">
       <div class="bar">
@@ -112,12 +150,13 @@
   <div class="container">
     <div class="head">
       <h1>Submissions</h1>
-      <p class="count" id="count">Loading…</p>
+      <p class="count" id="count">—</p>
     </div>
 
     <div class="toolbar">
       <input class="search" id="search" type="search" placeholder="Search by name or email…" autocomplete="off" />
-      <button class="refresh" id="refresh" type="button">Refresh</button>
+      <button class="ctl" id="refresh" type="button">Refresh</button>
+      <button class="ctl" id="logout" type="button">Lock</button>
     </div>
 
     <div class="table-wrap">
@@ -131,30 +170,27 @@
           </tr>
         </thead>
         <tbody id="rows">
-          <tr><td colspan="4"><div class="state" id="state">Loading submissions…</div></td></tr>
+          <tr><td colspan="4"><div class="state" id="state">Unlock to load submissions.</div></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-    // Public anon key — exposed in the browser by design for now.
-    // NOTE: this internal admin page reads signups directly, so Row Level
-    // Security must remain DISABLED on the signups table for now.
-    // Real auth/security comes later.
-    const SUPABASE_URL = "https://oywmcuoziylczkfstoyu.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95d21jdW96aXlsY3prZnN0b3l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2OTI4ODQsImV4cCI6MjA5NzI2ODg4NH0.PqdiZ2RYXmGh7ke-QKFj3Rvv3gzLEefWpuODrh1zkoY";
-
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+  <script>
     const rowsEl = document.getElementById("rows");
     const countEl = document.getElementById("count");
     const searchEl = document.getElementById("search");
     const refreshEl = document.getElementById("refresh");
+    const logoutEl = document.getElementById("logout");
+    const gate = document.getElementById("gate");
+    const gateForm = document.getElementById("gateForm");
+    const gatePass = document.getElementById("gatePass");
+    const gateBtn = document.getElementById("gateBtn");
+    const gateErr = document.getElementById("gateErr");
 
     let all = [];
+    const KEY = "rk_admin_pw";
+    const getPass = () => sessionStorage.getItem(KEY) || "";
 
     const fmtDate = (iso) => {
       const d = new Date(iso);
@@ -169,12 +205,8 @@
     function showState(msg, isErr = false) {
       rowsEl.innerHTML = `<tr><td colspan="4"><div class="state${isErr ? " err" : ""}">${esc(msg)}</div></td></tr>`;
     }
-
     function render(list) {
-      if (!list.length) {
-        showState(all.length ? "No matches." : "No submissions yet.");
-        return;
-      }
+      if (!list.length) { showState(all.length ? "No matches." : "No submissions yet."); return; }
       rowsEl.innerHTML = list.map((r) => `
         <tr>
           <td class="c-date">${esc(fmtDate(r.created_at))}</td>
@@ -183,7 +215,6 @@
           <td class="c-msg${r.message ? "" : " empty"}">${r.message ? esc(r.message) : "—"}</td>
         </tr>`).join("");
     }
-
     function applyFilter() {
       const q = searchEl.value.trim().toLowerCase();
       if (!q) return render(all);
@@ -193,29 +224,61 @@
       ));
     }
 
+    function showGate(msg = "") {
+      gateErr.textContent = msg;
+      gate.classList.remove("hidden");
+      gatePass.value = "";
+      gatePass.focus();
+    }
+    function hideGate() { gate.classList.add("hidden"); }
+
     async function load() {
+      const pass = getPass();
+      if (!pass) { showGate(); return; }
       showState("Loading submissions…");
       countEl.textContent = "Loading…";
-      const { data, error } = await supabase
-        .from("signups")
-        .select("created_at, name, email, message")
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        console.error(error);
-        countEl.textContent = "Could not load submissions.";
-        showState("Could not load submissions. If Row Level Security is enabled on the signups table, the anon key cannot read rows — disable RLS for now.", true);
+      let res;
+      try {
+        res = await fetch("/api/submissions", { headers: { Authorization: `Bearer ${pass}` } });
+      } catch {
+        countEl.textContent = "Network error.";
+        showState("Network error. Try Refresh.", true);
         return;
       }
-
-      all = data || [];
+      if (res.status === 401) {
+        sessionStorage.removeItem(KEY);
+        countEl.textContent = "—";
+        showGate("Incorrect password.");
+        return;
+      }
+      const result = await res.json().catch(() => ({}));
+      if (!res.ok || !result.ok) {
+        countEl.textContent = "Could not load.";
+        showState(result.error || "Could not load submissions.", true);
+        return;
+      }
+      all = result.data || [];
       countEl.innerHTML = `<strong>${all.length}</strong> total submission${all.length === 1 ? "" : "s"}`;
       applyFilter();
     }
 
+    gateForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const pass = gatePass.value.trim();
+      if (!pass) return;
+      sessionStorage.setItem(KEY, pass);
+      gateBtn.disabled = true;
+      gateErr.textContent = "";
+      await load();
+      gateBtn.disabled = false;
+      if (getPass()) hideGate();
+    });
+    logoutEl.addEventListener("click", () => { sessionStorage.removeItem(KEY); all = []; countEl.textContent = "—"; showState("Locked."); showGate(); });
     searchEl.addEventListener("input", applyFilter);
     refreshEl.addEventListener("click", load);
-    load();
+
+    // Boot: if a password is already cached this session, try loading; else gate.
+    if (getPass()) { hideGate(); load(); } else { showGate(); }
   </script>
 </body>
 </html>

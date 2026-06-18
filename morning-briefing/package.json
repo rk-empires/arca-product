@@ -1,0 +1,19 @@
+{
+  "name": "morning-briefing",
+  "version": "1.0.0",
+  "description": "Daily email automation that summarizes data from Supabase with Claude and sends it via Resend on a schedule.",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "send-now": "node index.js --now"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.104.2",
+    "@supabase/supabase-js": "^2.108.2",
+    "dotenv": "^17.4.2",
+    "node-cron": "^4.4.1",
+    "resend": "^6.14.0"
+  }
+}
